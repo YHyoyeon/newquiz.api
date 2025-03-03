@@ -26,7 +26,9 @@ export async function init(app: express.Express) {
     // app.use('/api-doc', swaggerUi.serveFiles(swaggerDocs), swaggerUi.setup(swaggerDocs));
     // app.use('/api-doc-test', swaggerUi.serveFiles(swaggerTestDocs), swaggerUi.setup(swaggerTestDocs));
 
-    // // 메모리 저장소가 내장되어 있다. (Redis, Memcached 등을 사용하려면 express-rate-limit 페이지 참조)
+    app.set('trust proxy', 1);
+
+    // 메모리 저장소가 내장되어 있다. (Redis, Memcached 등을 사용하려면 express-rate-limit 페이지 참조)
     const limiter = rateLimit({
         windowMs: 15 * 60 * 1000,  // 15분 
         limit: 100,  // 각 IP를 `window`당 100개의 요청으로 제한합니다(여기서는 15분당)
