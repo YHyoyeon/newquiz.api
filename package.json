@@ -1,12 +1,13 @@
 {
     "name": "newquiz.api",
     "version": "0.0.0",
-    "description": "New Quiz Api Server",
+    "description": "New-Quiz Api Server",
     "author": "newquiz.api <gydus.dev@gmail.com>",
     "scripts": {
       "build": "rm -rf ./dist ; tsc --build",
-      "dev:nodemon": "nodemon --watch src --ext ts --exec ts-node src/app_news/app.ts",
-      "dev": "ts-node src/app_news/app.ts",
+      "start:news:dev": "INSTANCES=2 pm2 start ecosystem.config.js --env dev --only news_server",
+      "news:nodemon": "nodemon --watch src --ext ts --exec ts-node src/app_news/app.ts",
+      "news": "ts-node src/app_news/app.ts",
       "lint": "eslint --ext .ts ./src"
     },
     "repository": {
