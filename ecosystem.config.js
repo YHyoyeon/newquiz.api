@@ -6,17 +6,13 @@ module.exports = {
             watch: false,
             env_local: {
                 SERVER_ENV: 'local',
+                FILE_EXT: 'js',
             },
             env_dev: {
                 SERVER_ENV: 'dev',
+                FILE_EXT: 'js',
             },
-            env_qa: {
-                SERVER_ENV: 'qa',
-            },
-            env_live: {
-                SERVER_ENV: 'live',
-            },
-            instances: process.env.INSTANCES,
+            instances: process.env.INSTANCES || 2,
             exec_mode: 'cluster',
             listen_timeout: 50000,
             kill_timeout: 5000,

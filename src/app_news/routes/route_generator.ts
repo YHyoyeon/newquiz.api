@@ -4,6 +4,7 @@ import path from 'path';
 import * as middlewares from '../../shared/middlewares';
 
 const CONTROLLERS_PATH = path.resolve(__dirname, '../controllers');
+const FILE_EXT = process.env.FILE_EXT || 'ts';
 
 // 재귀적으로 디렉토리에서 컨트롤러 파일 목록 가져오기
 function getControllerFiles(dirPath: string): string[] {
@@ -17,7 +18,7 @@ function getControllerFiles(dirPath: string): string[] {
         if (stat.isDirectory()) {
             // 하위 디렉토리 탐색
             results.push(...getControllerFiles(filePath));
-        } else if (files[i].endsWith('_controller.ts')) {
+        } else if (files[i].endsWith(`_controller.${FILE_EXT}`)) {
             results.push(filePath);
         }
     }
@@ -46,7 +47,7 @@ export default async function (router: express.Router) {
         }
 
         const relativePath = path.relative(CONTROLLERS_PATH, filePath);
-        const routePath = '/' + relativePath.replace('_controller.ts', '').replace(/\\/g, '/');
+        const routePath = '/' + relativePath.replace(`_controller.${FILE_EXT}`, '').replace(/\\/g, '/');
         const method = meta.method || 'get';
         const validationSchema = meta.validationSchema;
 
