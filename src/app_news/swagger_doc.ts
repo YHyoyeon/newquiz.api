@@ -1,6 +1,6 @@
 import swaggerJsdoc from 'swagger-jsdoc';
 
-const serverUrl = process.env.SERVER_ENV === 'local' ? 'http://localhost:12041' : 'http://1.235.234.86';
+const serverUrl = process.env.SERVER_ENV === 'local' ? 'http://localhost:12041' : 'https://1.235.234.86';
 
 const newServerOptions = {
     definition: {
