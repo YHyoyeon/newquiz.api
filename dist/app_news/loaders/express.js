@@ -50,42 +50,49 @@ const express_1 = __importDefault(require("express"));
 const compression_1 = __importDefault(require("compression"));
 const xss_clean_1 = __importDefault(require("xss-clean"));
 const cors_1 = __importDefault(require("cors"));
-const express_rate_limit_1 = require("express-rate-limit");
+// import { rateLimit } from 'express-rate-limit';
 const middlewares = __importStar(require("../../shared/middlewares"));
-const config_1 = require("../../config");
+// import { config } from '../../config';
 const route_generator_1 = __importDefault(require("../routes/route_generator"));
-// import swaggerUi from 'swagger-ui-express';
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const helmet_1 = __importDefault(require("helmet"));
+const swagger_doc_1 = require("../swagger_doc");
 function init(app) {
     return __awaiter(this, void 0, void 0, function* () {
-        const corsOptions = {
-            origin: config_1.config.NODE_ENV,
-            allowedHeaders: [
-                'content-type',
-                'authorization',
-                'idempotency-key',
-                'refresh',
-                'language',
-            ],
-        };
-        app.use((0, cors_1.default)(corsOptions));
-        // app.use('/api-doc', swaggerUi.serveFiles(swaggerDocs), swaggerUi.setup(swaggerDocs));
-        // app.use('/api-doc-test', swaggerUi.serveFiles(swaggerTestDocs), swaggerUi.setup(swaggerTestDocs));
-        app.set('trust proxy', 1);
+        // app.set('trust proxy', 1);
+        // const corsOptions = {
+        //     origin: config.NODE_ENV,
+        //     allowedHeaders: [
+        //         'content-type',
+        //         'authorization',
+        //         'idempotency-key',
+        //         'refresh',
+        //         'language',
+        //     ],
+        // };
+        // app.use(cors(corsOptions));
+        app.options('*', (0, cors_1.default)());
+        app.use((0, helmet_1.default)());
+        if (process.env.SERVER_ENV !== 'live') {
+            app.use('/swagger', swagger_ui_express_1.default.serveFiles(swagger_doc_1.newServerSwaggerDocs), swagger_ui_express_1.default.setup(swagger_doc_1.newServerSwaggerDocs));
+        }
         // 메모리 저장소가 내장되어 있다. (Redis, Memcached 등을 사용하려면 express-rate-limit 페이지 참조)
-        const limiter = (0, express_rate_limit_1.rateLimit)({
-            windowMs: 15 * 60 * 1000, // 15분 
-            limit: 100, // 각 IP를 `window`당 100개의 요청으로 제한합니다(여기서는 15분당)
-            standardHeaders: 'draft-7', // draft-6: `RateLimit-*` 헤더; draft-7: 결합된 `RateLimit` 헤더 
-            legacyHeaders: false, // `X-RateLimit-*` 헤더를 비활성화합니다. 
-            // store: ... , // Redis, Memcached 등
-        });
+        // const limiter = rateLimit({
+        //     windowMs: 15 * 60 * 1000,  // 15분 
+        //     limit: 100,  // 각 IP를 `window`당 100개의 요청으로 제한합니다(여기서는 15분당)
+        //     standardHeaders: 'draft-7',  // draft-6: `RateLimit-*` 헤더; draft-7: 결합된 `RateLimit` 헤더 
+        //     legacyHeaders: false,  // `X-RateLimit-*` 헤더를 비활성화합니다. 
+        //     // store: ... , // Redis, Memcached 등
+        // });
         // // 모든 요청에 속도 제한 미들웨어 적용
-        app.use(limiter);
+        // app.use(limiter);
         app.use(express_1.default.json({ limit: '1mb' })); // 1MB 이상 요청 금지
         app.use(express_1.default.json());
         app.use(express_1.default.urlencoded({ extended: true }));
         app.use((0, xss_clean_1.default)());
         app.use((0, compression_1.default)());
+        // TODO: sql Injection Middleware
+        // app.use(middlewares.sqlInjectionMiddleware);
         // 라우터 생성
         const router = express_1.default.Router();
         // 동적 라우트 등록

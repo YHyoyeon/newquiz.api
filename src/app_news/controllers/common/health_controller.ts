@@ -4,6 +4,18 @@ import { Handler, HandlerMeta } from '../../../types/route_handler';
 import { ApiResult } from '../../../types/result_api';
 import { ResultCode } from '../../../types/result_code';
 
+/**
+ * @openapi
+ * /api/common/health:
+ *   get:
+ *     tags:
+ *       - common
+ *     summary: health!
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ */
+
 export const execute: Handler = async (req: Request, res: Response, next: NextFunction) => {
     const result: ApiResult = {
         code: 1,

@@ -11,6 +11,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.meta = exports.execute = void 0;
 const result_code_1 = require("../../../types/result_code");
+/**
+ * @openapi
+ * /api/common/health:
+ *   get:
+ *     tags:
+ *       - common
+ *     summary: health!
+ *     responses:
+ *       '200':
+ *         description: Successful operation
+ */
 const execute = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const result = {
         code: 1,
